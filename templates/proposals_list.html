@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Open proposals{% endblock %}
+
+{% block content %}
+<h3>Open proposals</h3>
+<div class="spacer"></div>
+
+<div class="actions">
+  <a class="btn" href="{{ url_for('proposals.new_proposal') }}">+ New proposal</a>
+</div>
+
+<div class="spacer"></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Destination</th>
+      <th>Departure</th>
+      <th>Budget</th>
+      <th>Max participants</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in proposals %}
+      <tr>
+        <td>{{ p.title }}</td>
+        <td>{{ p.destination or 'TBD' }}</td>
+        <td>{{ p.departure or 'TBD' }}</td>
+        <td>
+          {% if p.budget is not none %}
+            {{ p.budget }}
+          {% else %}
+            TBD
+          {% endif %}
+        </td>
+        <td>{{ p.max_participants or 'TBD' }}</td>
+        <td>
+          <a class="btn secondary" href="{{ url_for('proposals.proposal_detail', proposal_id=p.id) }}">Open</a>
+        </td>
+      </tr>
+    {% else %}
+      <tr>
+        <td colspan="6" class="muted">No open proposals yet.</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

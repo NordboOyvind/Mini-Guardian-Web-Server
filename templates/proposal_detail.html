@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% block title %}Proposal details{% endblock %}
+{% block content %}
+<div class="flex items-center justify-between">
+  <h3>{{ proposal.title }}</h3>
+
+  {% if participation and participation.can_edit %}
+  <form method="post"
+        action="{{ url_for('proposals.delete_proposal', proposal_id=proposal.id) }}"
+        onsubmit="return confirm('Are you sure you want to delete this proposal?');"
+        style="margin:0;">
+    <button type="submit"
+            title="Delete proposal"
+            style="background:none;border:none;cursor:pointer;color:#f55;font-size:1.2em;line-height:1;">
+      &#10005;
+    </button>
+  </form>
+  {% endif %}
+</div>
+
+<div class="spacer"></div>
+
+<div class="grid cols-2">
+  <!-- Info-panel -->
+  <div class="panel">
+    <p><strong>Destination:</strong> {{ proposal.destination or 'TBD' }}</p>
+    <p><strong>Departure:</strong> {{ proposal.departure or 'TBD' }}</p>
+    <p><strong>Budget:</strong>
+      {% if proposal.budget is not none %}{{ proposal.budget }}{% else %}TBD{% endif %}
+    </p>
+    <p><strong>Max participants:</strong> {{ proposal.max_participants or 'TBD' }}</p>
+    <p><strong>Status:</strong> {{ proposal.status.name if proposal.status else 'open' }}</p>
+
+    <div class="actions">
+      <a class="btn secondary" href="{{ url_for('proposals.list_proposals') }}">← Back</a>
+    </div>
+  </div>
+
+  <!-- Meldinger + Meetups -->
+  <div class="panel">
+    <h4>Message board</h4>
+    <form method="post" action="{{ url_for('proposals.post_message', proposal_id=proposal.id) }}" class="stack">
+      <label for="msg-body" class="sr-only">Message</label>
+      <textarea id="msg-body" name="body" rows="3" placeholder="Write a message..." required></textarea>
+      <button type="submit" class="btn">Post</button>
+    </form>
+
+    <ul class="list">
+      {% for m in messages %}
+        <li class="list-item">
+          <div><strong>{{ m.author.email if m.author else 'Unknown' }}</strong>
+            <small class="muted"> · {{ m.timestamp.strftime('%Y-%m-%d %H:%M') if m.timestamp else '' }}</small>
+          </div>
+          <div>{{ m.content }}</div>
+        </li>
+      {% else %}
+        <li class="muted">No messages yet.</li>
+      {% endfor %}
+    </ul>
+
+    <div class="spacer"></div>
+
+    <h4>Meetups</h4>
+
+    <!-- Slå av native validering og bygg ISO selv -->
+    <form id="meetup-form" novalidate
+          method="post"
+          action="{{ url_for('proposals.add_meetup', proposal_id=proposal.id) }}"
+          class="grid cols-2 gap">
+
+      <div>
+        <label for="meetup-location">Location</label>
+        <input id="meetup-location" name="location" placeholder="e.g. Oslo Central Station">
+      </div>
+
+      <div>
+        <label for="meetup-date">Date</label>
+        <input id="meetup-date" type="date" name="date" placeholder="YYYY-MM-DD" required>
+      </div>
+
+      <div>
+        <label for="meetup-time">Time</label>
+        <!-- Ren tekst → ingen nettleser-quirks -->
+        <input id="meetup-time"
+               type="text"
+               name="time_text"
+               inputmode="numeric"
+               autocomplete="off"
+               placeholder="HH:MM"
+               maxlength="5">
+        <small class="muted">Format: HH:MM (24-hour)</small>
+      </div>
+
+      <!-- Dette fylles av JS: YYYY-MM-DDTHH:MM -->
+      <input type="hidden" id="meetup-datetime" name="datetime" value="">
+
+      <div class="col-span-2 actions">
+        <button type="submit" class="btn" formnovalidate>Add meetup</button>
+      </div>
+    </form>
+
+    <ul class="list">
+      {% for m in meetups %}
+        <li class="list-item">
+          <strong>{{ m.location or 'TBD' }}</strong>
+          <small class="muted"> — {{ m.datetime.strftime('%Y-%m-%d %H:%M') if m.datetime else 'TBD' }}</small>
+        </li>
+      {% else %}
+        <li class="muted">No meetups scheduled yet.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<script>
+  // Enkel input-mask: formater til HH:MM mens man skriver
+  (function () {
+    const timeInput = document.getElementById('meetup-time');
+    if (timeInput) {
+      timeInput.addEventListener('input', function () {
+        let v = this.value.replace(/[^\d]/g, '').slice(0,4); // bare tall, maks 4
+        if (v.length >= 3) v = v.slice(0,2) + ':' + v.slice(2);
+        this.value = v;
+      });
+    }
+
+    const form = document.getElementById('meetup-form');
+    const dateInput = document.getElementById('meetup-date');
+    const dtHidden  = document.getElementById('meetup-datetime');
+
+    form.addEventListener('submit', function (e) {
+      const d = (dateInput.value || '').trim();
+      const t = (timeInput.value || '').trim();
+
+      const m = t.match(/^(\d{1,2}):(\d{2})$/);
+      if (!d) { alert('Please choose a date.'); e.preventDefault(); return; }
+      if (!m) { alert('Please enter time as HH:MM.'); e.preventDefault(); return; }
+
+      const h = parseInt(m[1],10), mm = parseInt(m[2],10);
+      if (h < 0 || h > 23 || mm < 0 || mm > 59) {
+        alert('Time out of range (00:00–23:59).'); e.preventDefault(); return;
+      }
+
+      const hh = String(h).padStart(2,'0');
+      const m2 = String(mm).padStart(2,'0');
+      dtHidden.value = d + 'T' + hh + ':' + m2; // ISO uten sekunder
+    });
+  })();
+</script>
+{% endblock %}

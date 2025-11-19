@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Edit profile{% endblock %}
+{% block content %}
+<h3>Edit profile</h3>
+<form method="post">
+<label>About me
+<textarea name="description" rows="6">{{ form.description.data }}</textarea>
+</label>
+<button type="submit">Save</button>
+</form>
+{% endblock %}

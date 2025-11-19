@@ -1,0 +1,38 @@
+{% set here = request.endpoint or '' %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{% block title %}TravelTogether{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" />
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="brand">TravelTogether ✈️</div>
+      <a href="{{ url_for('index') }}" class="{% if here=='index' %}active{% endif %}">Home</a>
+      <a href="{{ url_for('proposals.list_proposals') }}" class="{% if 'proposals' in here %}active{% endif %}">Proposals</a>
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('auth.profile_view', user_id=current_user.id) }}">My profile</a>
+        <a href="{{ url_for('auth.logout') }}" class="secondary">Logout</a>
+      {% else %}
+        <a href="{{ url_for('auth.login') }}" class="secondary">Login</a>
+        <a href="{{ url_for('auth.register') }}" class="secondary">Register</a>
+      {% endif %}
+    </nav>
+
+    <div class="container">
+      {% with msgs = get_flashed_messages(with_categories=true) %}
+        {% if msgs %}
+          {% for category, msg in msgs %}
+            <div class="flash {{ category }}">{{ msg }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <div class="panel">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+  </body>
+</html>
