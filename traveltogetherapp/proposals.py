@@ -160,6 +160,31 @@ def proposal_join(proposal_id: int):
         "proposal_detail.html",
         proposal=proposal)
 
+@proposals_bp.route("/proposal/<int:proposal_id>/leave")
+@login_required
+def proposal_leave(proposal_id: int):
+    participation = Participation.query.filter_by(
+        proposal_id=proposal_id,
+        user_id=current_user.id
+    ).first()
+    
+    if not participation:
+        flash("You are not participating in this trip.", "info")
+        return redirect(url_for("proposals.list_proposals"))
+
+    db.session.delete(participation)
+
+    # If trip was closed due to max participants, reopen if space available
+    proposal = TripProposal.query.get(proposal_id)
+    if proposal.status == ProposalStatus.closed_to_new_participants:
+        if proposal.max_participants and proposal.participations.count() < proposal.max_participants:
+            proposal.status = ProposalStatus.open
+
+   #TODO: If a participant wanting to leave a trip proposal that has not been finalized or cancelled yet is the only one with editing permissions for it, the application will not allow them to leave. 
+
+    db.session.commit()
+    flash("You left the trip.", "success")
+    return redirect(url_for("proposals.list_proposals"))
 
 @proposals_bp.route("/proposal/new", methods=["GET", "POST"])
 @login_required

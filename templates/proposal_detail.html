@@ -19,7 +19,9 @@
 </div>
 
 <div class="spacer"></div>
-
+<div class="actions">
+  <a class="btn secondary" href="{{ url_for('proposals.list_proposals') }}">← Back</a>
+</div>
 <div class="grid cols-2">
   <!-- Info-panel -->
   <div class="panel">
@@ -32,7 +34,7 @@
     <p><strong>Status:</strong> {{ proposal.status.name if proposal.status else 'open' }}</p>
 
     <div class="actions">
-      <a class="btn secondary" href="{{ url_for('proposals.list_proposals') }}">← Back</a>
+      <a class="btn alert" href="{{ url_for('proposals.proposal_leave', proposal_id=proposal.id) }}">← Leave</a>
     </div>
   </div>
 
