@@ -96,7 +96,7 @@
     <ul class="list">
       {% for m in messages %}
         <li class="list-item">
-          <div><strong>{{ m.author.email if m.author else 'Unknown' }}</strong>
+          <div><strong>{% if m.author %}{{ m.author.alias if m.author.alias else m.author.email }}{% else %}Unknown{% endif %}</strong>
             <small class="muted"> · {{ m.timestamp.strftime('%Y-%m-%d %H:%M') if m.timestamp else '' }}</small>
           </div>
           <div>{{ m.content }}</div>

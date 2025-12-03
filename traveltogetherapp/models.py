@@ -16,6 +16,8 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text)
+    # Optional display alias shown across the site (e.g., "Alex", "Traveller123")
+    alias = db.Column(db.String(50), nullable=True)
 
     # Relasjoner
     messages = db.relationship("Message", backref="author", lazy=True)

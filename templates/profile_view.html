@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 {% block title %}Profile{% endblock %}
 {% block content %}
-<h3>{{ user.email }}</h3>
+<h3>{{ user.alias if user.alias else user.email }}</h3>
+{% if user.alias %}
+<p class="muted">{{ user.email }}</p>
+{% endif %}
 <p>{{ user.description or 'No description yet.' }}</p>
 <p><a href="{{ url_for('auth.profile_edit') }}">Edit profile</a></p>
 <div class="spacer"></div>

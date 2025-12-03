@@ -21,7 +21,7 @@
       <a href="{{ url_for('index') }}" class="{% if here=='index' %}active{% endif %}">Home</a>
       <a href="{{ url_for('proposals.list_proposals') }}" class="{% if 'proposals' in here %}active{% endif %}">Proposals</a>
       {% if current_user.is_authenticated %}
-        <a href="{{ url_for('auth.profile_view', user_id=current_user.id) }}">My profile</a>
+        <a href="{{ url_for('auth.profile_view', user_id=current_user.id) }}">{{ current_user.alias if current_user.alias else 'My profile' }}</a>
         <a href="{{ url_for('auth.logout') }}" class="secondary logout">Logout</a>
       {% else %}
         <a href="{{ url_for('auth.login') }}" class="secondary login">Login</a>

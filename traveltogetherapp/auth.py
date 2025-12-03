@@ -28,11 +28,13 @@ def register():
 
         # Bruk Werkzeug sin default: pbkdf2:sha256
         hashed_password = generate_password_hash(password)
-        user = User(email=email, password=hashed_password, description="")
+        user = User(email=email, password=hashed_password, description="", alias=None)
         db.session.add(user)
         db.session.commit()
-        flash("Registration successful. Please log in.", "success")
-        return redirect(url_for("auth.login"))
+        # Log in user and redirect to profile edit to set user name
+        login_user(user)
+        flash("Registration successful! Please set your user name and profile.", "success")
+        return redirect(url_for("auth.profile_edit"))
     return render_template("auth_register.html", form=form)
 
 
@@ -80,12 +82,15 @@ def profile_view(user_id):
 def profile_edit():
     form = ProfileForm(request.form if request.method == "POST" else None)
     if request.method == "POST" and form.validate():
+        current_user.alias = (form.alias.data or "").strip()
         current_user.description = form.description.data or ""
         db.session.commit()
         flash("Profile updated.", "success")
-        return redirect(url_for("auth.profile_view", user_id=current_user.id))
+        return redirect(url_for("proposals.list_proposals"))
     # prefill når GET
     if request.method == "GET":
         if hasattr(form, "description"):
             form.description.data = current_user.description or ""
+        if hasattr(form, "alias"):
+            form.alias.data = current_user.alias or ""
     return render_template("profile_edit.html", form=form)

@@ -3,8 +3,12 @@
 {% block content %}
 <h3>Edit profile</h3>
 <form method="post">
+<label>User name *
+<input type="text" name="alias" value="{{ form.alias.data }}" placeholder="e.g. Alex, Traveller123" required />
+</label>
+
 <label>About me
-<textarea name="description" rows="6">{{ form.description.data }}</textarea>
+<textarea name="description" rows="6" placeholder="Tell us about yourself (optional)">{{ form.description.data }}</textarea>
 </label>
 <button type="submit">Save</button>
 </form>

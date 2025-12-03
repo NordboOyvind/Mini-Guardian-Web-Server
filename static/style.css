@@ -108,13 +108,13 @@ a:hover{opacity:.9}
   outline:none;
 }
 
-/* Logout should glow red on hover instead of green */
+/* Logout should glow red on hover*/
 .nav a.logout:hover,
 .nav a.logout:focus{
   background:rgba(239,68,68,0.08);
   box-shadow:0 8px 24px rgba(239,68,68,0.18);
   transform:translateY(-1px);
-  color:white;
+  color:var(--text);
   outline:none;
 }
 
@@ -124,7 +124,8 @@ a:hover{opacity:.9}
   background:rgba(34,197,94,0.08);
   box-shadow:0 10px 30px rgba(34,197,94,0.18);
   transform:translateY(-1px);
-  color:#052e16;
+  color:var(--text);
+  outline:none;
 }
 
 /* Homepage login CTA green glow (stronger) */
@@ -141,7 +142,7 @@ a:hover{opacity:.9}
   background:rgba(245,158,11,0.08);
   box-shadow:0 8px 24px rgba(245,158,11,0.14);
   transform:translateY(-1px);
-  color:#1f2937;
+  color:var(--text);
   outline:none;
 }
 
@@ -173,22 +174,31 @@ h1{font-size:26px} h2{font-size:22px} h3{font-size:20px; color:#cbd5e1}
 .home-cta a{ text-decoration:none; color:var(--text); padding:8px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); }
 .home-cta a.secondary{ border-color: rgba(255,255,255,0.08); }
 
-/* Make homepage CTA links use the same hover/lift effect as nav links */
-.home-cta a:hover,
-.home-cta a:focus{
-  background:rgba(255,255,255,.04);
-  box-shadow:0 8px 20px rgba(0,0,0,0.35), 0 6px 18px rgba(34,197,94,0.06);
+/* Homepage login CTA: match nav green glow */
+.home-cta a.login:hover,
+.home-cta a.login:focus{
+  background:rgba(34,197,94,0.08);
+  box-shadow:0 10px 30px rgba(34,197,94,0.18);
   transform:translateY(-1px);
+  color:var(--text);
   outline:none;
 }
 
-/* Register on homepage should glow yellow */
-.home-cta a.secondary:hover,
-.home-cta a.secondary:focus{
+/* Homepage register CTA: match nav yellow glow */
+.home-cta a.register:hover,
+.home-cta a.register:focus{
   background:rgba(245,158,11,0.08);
   box-shadow:0 8px 24px rgba(245,158,11,0.14);
   transform:translateY(-1px);
+  color:var(--text);
   outline:none;
+}
+.home-cta a.secondary.register:hover,
+.home-cta a.secondary.register:focus {
+  background: rgba(245,158,11,0.12); /* yellow for register */
+  color: var(--text); /* keep text light */
+  box-shadow: 0 8px 24px rgba(245,158,11,0.14);
+  outline: none;
 }
 
 /* Autocomplete dropdown */

@@ -13,7 +13,7 @@ class Config:
     DB_USER = os.getenv('DB_USER', '26_webapp_34')
     DB_PASS = os.getenv('DB_PASS', 'EfS4pvUh')
     DB_HOST = os.getenv('DB_HOST', 'mysql.lab.it.uc3m.es')
-    DB_NAME = os.getenv('DB_NAME', '26_webapp_34a')  # Choose: 34a, 34b, 34c, or 34d
+    DB_NAME = os.getenv('DB_NAME', '26_webapp_34a')  # 34a, 34b, 34c, or 34d
     
     # Use SQLite for development, MySQL in production
     if os.getenv("FLASK_ENV") == "production":
