@@ -11,4 +11,6 @@ class Config:
     )
     
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    TEMPLATES_AUTO_RELOAD = True
+
 
