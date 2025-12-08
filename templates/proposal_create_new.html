@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}New proposal{% endblock %}
 {% block content %}
-<h3>Create a new proposal</h3>
+<h3>Create a new proposal</h3> 
 <div class="spacer"></div>
 <form method="post" class="grid cols-2">
   <div>
@@ -12,31 +12,19 @@
     <label>Departure location</label>
     <input id="departure" type="text" name="departure_location" autocomplete="off">
     <div id="departure-list" class="autocomplete-list" aria-hidden="true"></div>
-    <label style="margin-top: 0.5rem; display: block;">
-      <input type="checkbox" name="departure_location_is_final"> Mark as final
-    </label>
   </div>
   <div>
     <label>Destination</label>
     <input id="destination" type="text" name="destination" autocomplete="off">
     <div id="destination-list" class="autocomplete-list" aria-hidden="true"></div>
-    <label style="margin-top: 0.5rem; display: block;">
-      <input type="checkbox" name="destination_is_final"> Mark as final
-    </label>
   </div>
   <div>
     <label>Activities (comma-separated)</label>
     <textarea name="activities" rows="3" placeholder="e.g. hiking, museums, food tours"></textarea>
-    <label style="margin-top: 0.5rem; display: block;">
-      <input type="checkbox" name="activities_are_final"> Mark as final
-    </label>
   </div>
   <div>
     <label>Budget</label>
-    <input type="number" name="budget" step="0.01">
-    <label style="margin-top: 0.5rem; display: block;">
-      <input type="checkbox" name="budget_is_final"> Mark as final
-    </label>
+    <input type="number" name="budget" step="0.01" min="0">
   </div>
   <div>
     <label>Max participants</label>
@@ -49,16 +37,15 @@
   <div>
     <label>End date</label>
     <input type="date" name="end_date">
-    <label style="margin-top: 0.5rem; display: block;">
-      <input type="checkbox" name="dates_are_final"> Mark dates as final
-    </label>
   </div>
   <div class="col-span-2 actions">
     <button class="btn" type="submit">Create</button>
     <a class="btn secondary" href="{{ url_for('proposals.list_proposals') }}">Cancel</a>
   </div>
 </form>
-<small class="muted">Address autocomplete powered by OpenStreetMap (suggestions only).</small>
+<div style="margin-top: 1.5em;">
+  <small class="muted">Address autocomplete powered by <a href="https://www.openstreetmap.org" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> (suggestions only).</small>
+</div>
 
 <script>
 // Lightweight autocomplete using Nominatim (OpenStreetMap)

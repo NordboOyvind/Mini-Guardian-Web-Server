@@ -43,7 +43,9 @@
     <a class="btn secondary" href="{{ url_for('proposals.proposal_detail', proposal_id=proposal.id) }}">Cancel</a>
   </div>
 </form>
-<small class="muted">Address autocomplete powered by OpenStreetMap (suggestions only).</small>
+<div style="margin-top: 1.5em;">
+  <small class="muted">Address autocomplete powered by <a href="https://www.openstreetmap.org" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> (suggestions only).</small>
+</div>
 
 <script>
 // Lightweight autocomplete using Nominatim (OpenStreetMap)

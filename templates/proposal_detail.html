@@ -114,6 +114,8 @@
           <strong><a href="{{ url_for('auth.profile_view', user_id=part.user_id) }}">{{ part.user.alias if part.user.alias else part.user.email }}</a></strong>
           {% if part.can_edit %}
             <span class="muted">(editor)</span>
+          {% else %}
+            <span class="muted">(participant)</span>
           {% endif %}
           {% if participation and participation.can_edit and not part.can_edit and part.user_id != current_user.id %}
             <form method="post" action="{{ url_for('proposals.grant_edit_permission', proposal_id=proposal.id, user_id=part.user_id) }}" style="display:inline; margin-left:1em;">
