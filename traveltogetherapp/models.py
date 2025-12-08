@@ -28,8 +28,8 @@ class TripProposal(db.Model):
     title = db.Column(db.String(100), nullable=False)
     
     # Trip information
-    departure_location = db.Column(db.String(100), nullable=True)
-    destination = db.Column(db.String(100))
+    departure_location = db.Column(db.String(255), nullable=True)
+    destination = db.Column(db.String(255))
     budget = db.Column(db.Float, nullable=True)
     max_participants = db.Column(db.Integer, nullable=True)
     start_date = db.Column(db.Date, nullable=True)
