@@ -11,23 +11,124 @@ L Mathias Gjestad: 100576768
 ADDITIONAL FUNCTIONALITY
 ===============================================================================
 
-These additional features have been implemented beyond the basic requirements:
+Beyond the 12 mandatory requirements, these additional features have been 
+implemented for our project:
 
 1. USER PROFILES WITH ALIASES
    - Users can set a display name (alias) instead of showing email addresses
-   - Upon registering a new user, the person gets asked to set an alias and 
-     profile bio
-        - Full e-mail is still displayed in every user profile
+   - Upon registering, users are prompted to set an alias and profile bio
+   - Users can change their password from the profile edit page
 
-2. AUTOCOMPLETE FOR LOCATIONS
-   - Integration with OpenStreetMap Nominatim API
-   - Real-time location suggestions for departure and destination fields
-        - OpenStreetMap is limited. Not all street addresses are included but the 
-        - purpose is the same.
+2. LOCATION AUTOCOMPLETE
+   - Integration with OpenStreetMap Nominatim API 
+      - Real-time location suggestions for departure and destination fields
+      - Clickable link to OpenStreetMap website in proposal forms 
+   - Note: Limited to locations in OpenStreetMap database
 
-3. AUTOMATIC PROPOSAL CLEANUP
-   - When last participant leaves, the entire proposal is automatically deleted
-        - Prevents orphaned proposals with no participants
+3. PROPOSAL MANAGEMENT ENHANCEMENTS
+   - Reopen closed proposals: 
+      Editors can reopen "closed to new participants" proposals
+   - Automatic editor transfer: 
+      When an editor leaves and no other editors remain, rights transfer 
+      automatically to the first remaining participant
+   - Automatic cleanup:
+      When last participant leaves, proposal is deleted
+   - Role visibility: 
+      All participants can see who has editor rights (editor/participant labels)
+
+4. ENHANCED PROPOSAL DETAILS
+   - Additional optional fields: Departure location and activities
+   - Field validation: Budget cannot be negative, displays 0 instead of TBD when set to 0
+   - Extended location fields: Support for longer addresses (255 characters)
+
+5. IMPROVED NAVIGATION
+   - Back buttons: Easy navigation from proposals and profile pages
+   - Navigation bar: Quick access to proposals list and profile from detail pages
+   - Browser history integration: Back button uses browser history
+
+===============================================================================
+HOW TO USE THE APPLICATION
+===============================================================================
+
+STEP 1: REGISTER A NEW USER
+----------------------------
+1. Navigate to http://localhost:5000
+2. Click "Register" link
+3. Enter your email address and password (minimum 6 characters)
+4. Click "Register"
+5. Set your alias (display name) and write a short bio about yourself
+6. Click "Save" to complete registration
+
+STEP 2: CREATE A TRIP PROPOSAL
+-------------------------------
+1. After logging in, click "+ Add proposal" button
+2. Fill in the proposal details:
+   - Title (required)
+   - Departure location (with autocomplete suggestions)
+   - Destination (with autocomplete suggestions)
+   - Activities (comma-separated)
+   - Budget (leave empty for TBD, or enter 0 or any positive number)
+   - Max participants (required, default: 4)
+   - Start date and End date (optional)
+3. Click "Create"
+4. You are automatically added as a participant with editor rights
+
+STEP 3: VIEW AND JOIN PROPOSALS
+--------------------------------
+1. Browse the "Open proposals" list on the main page
+2. Click "Join" to join a proposal created by another user
+3. Click "Open" to view details of proposals you've already joined
+4. View proposal information, participants, messages, and meetup suggestions
+
+STEP 4: PARTICIPATE IN A PROPOSAL
+----------------------------------
+As a participant, you can:
+- Post messages on the message board
+- Suggest meetup times and locations
+- View all participants and their roles (editor/participant)
+- Leave the proposal by clicking "Leave"
+
+STEP 5: MANAGE AS EDITOR
+-------------------------
+If you have editor rights (creator or granted by another editor), you can:
+
+A. EDIT PROPOSAL DETAILS
+   - Click the blue "Edit" button
+   - Modify title, locations, dates, budget, activities, or max participants
+   - Click "Save changes"
+
+B. MANAGE PARTICIPANTS
+   - Grant edit rights to other participants by clicking "Grant edit rights"
+   - View all participants and their roles
+
+C. CHANGE PROPOSAL STATUS
+   - "Close to New": Stop accepting new participants
+   - "Reopen to New": Allow new participants again (if previously closed)
+   - "Finalize": Mark the trip as confirmed and final
+   - "Cancel": Cancel the entire trip proposal
+
+D. DELETE PROPOSAL
+   - Click the X button in the top-right corner
+   - Confirm deletion
+
+STEP 6: MANAGE YOUR PROFILE
+----------------------------
+1. Click your profile link or "My Profile" button
+2. Click "Edit profile"
+3. Update your alias or bio
+4. To change password:
+   - Enter new password in "New Password" field
+   - Confirm password in "Confirm New Password" field
+   - Leave both fields empty to keep current password
+5. Click "Save"
+
+STEP 7: LEAVING PROPOSALS
+--------------------------
+When you leave a proposal:
+- If you're the last participant, the proposal is automatically deleted
+- If you're an editor and other participants remain without editor rights, 
+  editor rights transfer to the first remaining participant automatically
+- If the proposal was full, it reopens to new participants
 
 ===============================================================================
 TEST USERS
@@ -37,15 +138,15 @@ For more efficient testing, you can use the following user accounts:
 
 User 1 (Creater of proposal):
   Email: test1@t1.com
-  Password: password
+  Password: Password
 
 User 2 (Participant w/o permissions):
   Email: test2@t2.com
-  Password: password
+  Password: Password
 
 User 3 (Newley created user, no proposals):
   Email: test3@t3.com
-  Password: password
+  Password: Password         
 
 ===============================================================================
 IMPORTANT INFORMATION FOR TESTING
