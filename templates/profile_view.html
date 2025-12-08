@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% block title %}Profile{% endblock %}
 {% block content %}
+<div class="actions" style="margin-bottom: 1em;">
+  <button class="btn secondary" onclick="window.history.back()">← Back</button>
+</div>
+
 <h3>{{ user.alias if user.alias else user.email }}</h3>
 {% if user.alias %}
 <p class="muted">{{ user.email }}</p>
