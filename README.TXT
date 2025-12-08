@@ -38,58 +38,88 @@ implemented for our project:
 
 4. ENHANCED PROPOSAL DETAILS
    - Additional optional fields: Departure location and activities
-   - Field validation: Budget cannot be negative, displays 0 instead of TBD when set to 0
-   - Extended location fields: Support for longer addresses (255 characters)
+   - Budget cannot be negative.
 
 5. IMPROVED NAVIGATION
-   - Back buttons: Easy navigation from proposals and profile pages
-   - Navigation bar: Quick access to proposals list and profile from detail pages
-   - Browser history integration: Back button uses browser history
+   - Back buttons: 
+      Easy navigation from proposals and profile pages
+      Back button uses browser history
+   - Navigation bar: 
+      Quick access to proposals list and profile from detail pages 
+
+===============================================================================
+IMPORTANT INFORMATION FOR TESTING
+===============================================================================
+DATABASE CONFIGURATION
+----------------------
+The application is configured to use the following MariaDB, with credentials:
+
+- Database: 26_webapp_34a
+- User: 26_webapp_34
+– Password: EfS4pvUh
+
+RUNNING THE APPLICATION
+-----------------------
+1. Ensure virtual environment is activated:
+   source venv/bin/activate 
+
+2. Run database migrations if needed:
+   python migrate_add_proposal_fields.py
+
+3. Start the application:
+   python app.py
+
+4. Access at: http://localhost:5000
+
+===============================================================================
+TEST USERS 
+-----------
+
+* For more efficient testing, you can use the following test accounts:
+* In proposal: "Traveling home for christmas"
+
+User 1 (Creater of proposal):
+  Email: test1@t1.com
+  Password: Password
+
+User 2 (Participant w/o permissions):
+  Email: test2@t2.com
+  Password: Password
+
+User 3 (Newley created user):
+  Email: test3@t3.com
+  Password: Password  
 
 ===============================================================================
 HOW TO USE THE APPLICATION
 ===============================================================================
-
-STEP 1: REGISTER A NEW USER
-----------------------------
-1. Navigate to http://localhost:5000
-2. Click "Register" link
-3. Enter your email address and password (minimum 6 characters)
+1. REGISTER A NEW USER
+--------------------------
+1. Navigate to http://localhost:5000 
+2. Click "Register/Login" link
+3. Enter your email address and password (min 6 characters)
 4. Click "Register"
-5. Set your alias (display name) and write a short bio about yourself
+5. Set your alias (display name) and write a short bio about yourself (Can be
+   modified later in profile view)
 6. Click "Save" to complete registration
 
+----------------------------------------------------------------------------
 STEP 2: CREATE A TRIP PROPOSAL
 -------------------------------
-1. After logging in, click "+ Add proposal" button
+1. After logging in, click "Add proposal" button
 2. Fill in the proposal details:
    - Title (required)
    - Departure location (with autocomplete suggestions)
    - Destination (with autocomplete suggestions)
-   - Activities (comma-separated)
-   - Budget (leave empty for TBD, or enter 0 or any positive number)
+   - Activities 
+   - Budget (any positive number)
    - Max participants (required, default: 4)
    - Start date and End date (optional)
 3. Click "Create"
 4. You are automatically added as a participant with editor rights
 
-STEP 3: VIEW AND JOIN PROPOSALS
---------------------------------
-1. Browse the "Open proposals" list on the main page
-2. Click "Join" to join a proposal created by another user
-3. Click "Open" to view details of proposals you've already joined
-4. View proposal information, participants, messages, and meetup suggestions
+Note!
 
-STEP 4: PARTICIPATE IN A PROPOSAL
-----------------------------------
-As a participant, you can:
-- Post messages on the message board
-- Suggest meetup times and locations
-- View all participants and their roles (editor/participant)
-- Leave the proposal by clicking "Leave"
-
-STEP 5: MANAGE AS EDITOR
--------------------------
 If you have editor rights (creator or granted by another editor), you can:
 
 A. EDIT PROPOSAL DETAILS
@@ -110,9 +140,26 @@ C. CHANGE PROPOSAL STATUS
 D. DELETE PROPOSAL
    - Click the X button in the top-right corner
    - Confirm deletion
+----------------------------------------------------------------------------
+3: VIEW AND JOIN PROPOSALS
+--------------------------
+1. Browse the "Open proposals" list on the main page
+2. Click "Join" to join a proposal created by another user
+3. Click "Open" to view details of proposals you've already joined
+4. View proposal information, participants, messages, and meetup suggestions
 
-STEP 6: MANAGE YOUR PROFILE
+----------------------------------------------------------------------------
+4: PARTICIPATE IN A PROPOSAL
 ----------------------------
+As a participant, you can:
+- Post messages on the message board
+- Suggest meetup times and locations
+- View all participants and their roles (editor/participant)
+- Leave the proposal by clicking "Leave"
+
+----------------------------------------------------------------------------
+5: MANAGE YOUR PROFILE
+-----------------------
 1. Click your profile link or "My Profile" button
 2. Click "Edit profile"
 3. Update your alias or bio
@@ -122,79 +169,23 @@ STEP 6: MANAGE YOUR PROFILE
    - Leave both fields empty to keep current password
 5. Click "Save"
 
-STEP 7: LEAVING PROPOSALS
---------------------------
+----------------------------------------------------------------------------
+6: LEAVING PROPOSALS
+---------------------
 When you leave a proposal:
 - If you're the last participant, the proposal is automatically deleted
 - If you're an editor and other participants remain without editor rights, 
   editor rights transfer to the first remaining participant automatically
 - If the proposal was full, it reopens to new participants
 
-===============================================================================
-TEST USERS
-===============================================================================
 
-For more efficient testing, you can use the following user accounts:
-
-User 1 (Creater of proposal):
-  Email: test1@t1.com
-  Password: Password
-
-User 2 (Participant w/o permissions):
-  Email: test2@t2.com
-  Password: Password
-
-User 3 (Newley created user, no proposals):
-  Email: test3@t3.com
-  Password: Password         
-
-===============================================================================
-IMPORTANT INFORMATION FOR TESTING
-===============================================================================
-
-DATABASE CONFIGURATION
-----------------------
-The application is configured to use the UC3M lab MariaDB infrastructure:
-- Database: 26_webapp_34a
-- Host: mysql.lab.it.uc3m.es
-- User: 26_webapp_34
-
-RUNNING THE APPLICATION
------------------------
-1. Ensure virtual environment is activated:
-   source venv/bin/activate 
-
-2. Run database migrations if needed:
-   python migrate_add_proposal_fields.py
-
-3. Start the application:
-   python app.py
-
-4. Access at: http://localhost:5000
-
-TESTING WORKFLOW
-----------------
-1. Register a new user account or use test accounts above
-2. Create a trip proposal with various details
-3. Mark some information as "final" using checkboxes
-4. Join proposals as different users to test collaboration
-5. Test meetup creation with date/time
-6. Try changing proposal status (close, finalize, cancel)
-7. Test leaving proposals and automatic cleanup
-
-KNOWN CONSIDERATIONS
---------------------
-- Location autocomplete requires internet connection (uses OpenStreetMap API)
-- Only proposal creators and users with can_edit permission can modify 
-  proposals
-- Proposals are automatically deleted when the last participant leaves
 
 ===============================================================================
 ARTIFICIAL INTELLIGENCE DECLARATION
 ===============================================================================
 
-We declare that artificial intelligence tools (specifically GitHub Copilot) were 
-used during the development of this project for the following purposes:
+We declare that artificial intelligence tools (ChatGPT) were used during the 
+development of this project for the following purposes:
 
 1. CODE GENERATION AND ASSISTANCE
    - Generating boilerplate code for Flask routes and database models
