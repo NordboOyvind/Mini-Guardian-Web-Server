@@ -149,15 +149,38 @@ def proposal_leave(proposal_id: int):
         flash("You were the last participant. The trip proposal has been deleted.", "success")
         return redirect(url_for("proposals.list_proposals"))
     
+    # Check if leaving user has edit rights
+    user_had_edit_rights = participation.can_edit
+    
     # Otherwise just remove this participant
     db.session.delete(participation)
+    db.session.commit()
+    
+    # If the leaving user had edit rights, check if there are other editors
+    if user_had_edit_rights:
+        remaining_editors = Participation.query.filter_by(
+            proposal_id=proposal_id,
+            can_edit=True
+        ).count()
+        
+        # If no editors remain, promote the first remaining participant
+        if remaining_editors == 0:
+            first_participant = Participation.query.filter_by(
+                proposal_id=proposal_id
+            ).first()
+            
+            if first_participant:
+                first_participant.can_edit = True
+                db.session.commit()
+                flash(f"You left the trip. Edit rights were transferred to another participant.", "success")
+                return redirect(url_for("proposals.list_proposals"))
 
     # If trip was closed due to max participants, reopen if space available
     if proposal.status == ProposalStatus.closed_to_new_participants:
-        if proposal.max_participants and len(proposal.participations) - 1 < proposal.max_participants:
+        if proposal.max_participants and len(proposal.participations) < proposal.max_participants:
             proposal.status = ProposalStatus.open
+            db.session.commit()
 
-    db.session.commit()
     flash("You left the trip.", "success")
     return redirect(url_for("proposals.list_proposals"))
 
@@ -206,13 +229,6 @@ def new_proposal():
             except ValueError:
                 pass
 
-        # Boolean fields for marking information as final
-        departure_location_is_final = request.form.get("departure_location_is_final") == "on"
-        destination_is_final = request.form.get("destination_is_final") == "on"
-        budget_is_final = request.form.get("budget_is_final") == "on"
-        dates_are_final = request.form.get("dates_are_final") == "on"
-        activities_are_final = request.form.get("activities_are_final") == "on"
-
         if not title:
             flash("Title is required.", "danger")
             return render_template("proposal_create_new.html")
@@ -226,11 +242,11 @@ def new_proposal():
             start_date=start_date,
             end_date=end_date,
             activities=activities,
-            departure_location_is_final=departure_location_is_final,
-            destination_is_final=destination_is_final,
-            budget_is_final=budget_is_final,
-            dates_are_final=dates_are_final,
-            activities_are_final=activities_are_final,
+            departure_location_is_final=False,
+            destination_is_final=False,
+            budget_is_final=False,
+            dates_are_final=False,
+            activities_are_final=False,
             creator_id=current_user.id,
         )
         db.session.add(proposal)
@@ -413,6 +429,28 @@ def close_to_new_participants_proposal(proposal_id: int):
     db.session.commit()
 
     flash("Proposal closed to new participants. Existing functionality remains available.", "success")
+    return redirect(url_for("proposals.proposal_detail", proposal_id=proposal_id))
+
+
+@proposals_bp.route("/proposal/<int:proposal_id>/reopen", methods=["POST"])
+@login_required
+def reopen_proposal(proposal_id: int):
+    """Reopen a proposal that was closed to new participants."""
+    proposal = TripProposal.query.get_or_404(proposal_id)
+
+    participation = get_participation(proposal)
+    if not participation or not participation.can_edit:
+        flash("You do not have permission to reopen this proposal.", "danger")
+        return redirect(url_for("proposals.proposal_detail", proposal_id=proposal_id))
+
+    if proposal.status != ProposalStatus.closed_to_new_participants:
+        flash("This proposal is not closed to new participants.", "warning")
+        return redirect(url_for("proposals.proposal_detail", proposal_id=proposal_id))
+
+    proposal.status = ProposalStatus.open
+    db.session.commit()
+
+    flash("Proposal reopened to new participants.", "success")
     return redirect(url_for("proposals.proposal_detail", proposal_id=proposal_id))
 
 

@@ -69,7 +69,7 @@
     {% if participation and participation.can_edit %}
       {% if proposal.status == ProposalStatus.open %}
       <div class="actions" style="margin-top: 1em; display: flex; gap: 0.5em; flex-wrap: wrap;">
-        <a class="btn secondary" href="{{ url_for('proposals.edit_proposal', proposal_id=proposal.id) }}" style="padding: 10px 14px;">Edit</a>
+        <a class="btn" href="{{ url_for('proposals.edit_proposal', proposal_id=proposal.id) }}" style="background-color: #2196f3; border: none; padding: 10px 14px;">Edit</a>
         <form method="post" action="{{ url_for('proposals.close_to_new_participants_proposal', proposal_id=proposal.id) }}" style="margin: 0;">
           <button type="submit" class="btn" style="background-color: #ff9800; border: none; padding: 10px 14px;">Close to New</button>
         </form>
@@ -83,7 +83,10 @@
       </div>
       {% elif proposal.status == ProposalStatus.closed_to_new_participants %}
       <div class="actions" style="margin-top: 1em; display: flex; gap: 0.5em; flex-wrap: wrap;">
-        <a class="btn secondary" href="{{ url_for('proposals.edit_proposal', proposal_id=proposal.id) }}" style="padding: 10px 14px;">Edit</a>
+        <a class="btn" href="{{ url_for('proposals.edit_proposal', proposal_id=proposal.id) }}" style="background-color: #2196f3; border: none; padding: 10px 14px;">Edit</a>
+        <form method="post" action="{{ url_for('proposals.reopen_proposal', proposal_id=proposal.id) }}" style="margin: 0;">
+          <button type="submit" class="btn" style="background-color: #03a9f4; border: none; padding: 10px 14px;">Reopen to New</button>
+        </form>
         <form method="post" action="{{ url_for('proposals.finalize_proposal', proposal_id=proposal.id) }}" style="margin: 0;">
           <button type="submit" class="btn" style="background-color: #4caf50; border: none; padding: 10px 14px;">Finalize</button>
         </form>
@@ -114,7 +117,7 @@
           {% endif %}
           {% if participation and participation.can_edit and not part.can_edit and part.user_id != current_user.id %}
             <form method="post" action="{{ url_for('proposals.grant_edit_permission', proposal_id=proposal.id, user_id=part.user_id) }}" style="display:inline; margin-left:1em;">
-              <button type="submit" class="btn small">Grant edit rights</button>
+              <button type="submit" class="btn small" style="padding: 4px 8px; font-size: 0.85em;">Grant edit rights</button>
             </form>
           {% endif %}
         </li>
