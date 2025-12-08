@@ -28,10 +28,10 @@
   <!-- Info-panel -->
   <div class="panel">
     <p><strong>Departure location:</strong> {{ proposal.departure_location or 'TBD' }}
-      {% if proposal.departure_location_is_final %}<span style="color: green;"> ✓ Final</span>{% endif %}
+      {% if proposal.departure_location_is_final %}<span style="color: green;"> Final</span>{% endif %}
     </p>
     <p><strong>Destination:</strong> {{ proposal.destination or 'TBD' }}
-      {% if proposal.destination_is_final %}<span style="color: green;"> ✓ Final</span>{% endif %}
+      {% if proposal.destination_is_final %}<span style="color: green;"> Final</span>{% endif %}
     </p>
     <p><strong>Date:</strong> 
       {% if proposal.start_date and proposal.end_date %}
@@ -41,14 +41,14 @@
       {% else %}
         TBD
       {% endif %}
-      {% if proposal.dates_are_final %}<span style="color: green;"> ✓ Final</span>{% endif %}
+      {% if proposal.dates_are_final %}<span style="color: green;"> Final</span>{% endif %}
     </p>
     <p><strong>Budget:</strong>
       {% if proposal.budget is not none %}{{ proposal.budget }}{% else %}TBD{% endif %}
-      {% if proposal.budget_is_final %}<span style="color: green;"> ✓ Final</span>{% endif %}
+      {% if proposal.budget_is_final %}<span style="color: green;"> Final</span>{% endif %}
     </p>
     <p><strong>Activities:</strong> {{ proposal.activities or 'TBD' }}
-      {% if proposal.activities_are_final %}<span style="color: green;"> ✓ Final</span>{% endif %}
+      {% if proposal.activities_are_final %}<span style="color: green;"> Final</span>{% endif %}
     </p>
     <p><strong>Max participants:</strong> {{ proposal.max_participants or 'TBD' }}</p>
     <p><strong>Status:</strong> 
@@ -69,6 +69,7 @@
     {% if participation and participation.can_edit %}
       {% if proposal.status == ProposalStatus.open %}
       <div class="actions" style="margin-top: 1em; display: flex; gap: 0.5em; flex-wrap: wrap;">
+        <a class="btn secondary" href="{{ url_for('proposals.edit_proposal', proposal_id=proposal.id) }}" style="padding: 10px 14px;">Edit</a>
         <form method="post" action="{{ url_for('proposals.close_to_new_participants_proposal', proposal_id=proposal.id) }}" style="margin: 0;">
           <button type="submit" class="btn" style="background-color: #ff9800; border: none; padding: 10px 14px;">Close to New</button>
         </form>
@@ -82,6 +83,7 @@
       </div>
       {% elif proposal.status == ProposalStatus.closed_to_new_participants %}
       <div class="actions" style="margin-top: 1em; display: flex; gap: 0.5em; flex-wrap: wrap;">
+        <a class="btn secondary" href="{{ url_for('proposals.edit_proposal', proposal_id=proposal.id) }}" style="padding: 10px 14px;">Edit</a>
         <form method="post" action="{{ url_for('proposals.finalize_proposal', proposal_id=proposal.id) }}" style="margin: 0;">
           <button type="submit" class="btn" style="background-color: #4caf50; border: none; padding: 10px 14px;">Finalize</button>
         </form>

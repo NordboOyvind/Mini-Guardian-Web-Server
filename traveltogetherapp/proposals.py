@@ -247,6 +247,47 @@ def new_proposal():
     return render_template("proposal_create_new.html")
 
 
+@proposals_bp.route("/proposal/<int:proposal_id>/edit", methods=["GET", "POST"])
+@login_required
+def edit_proposal(proposal_id: int):
+    """Edit an existing proposal (only for users with edit permissions)"""
+    proposal = db.session.get(TripProposal, proposal_id)
+    if not proposal:
+        flash("Proposal not found.", "danger")
+        return redirect(url_for("proposals.list_proposals"))
+    
+    participation = get_participation(proposal)
+    if not participation or not participation.can_edit:
+        flash("You don't have permission to edit this proposal.", "danger")
+        return redirect(url_for("proposals.proposal_detail", proposal_id=proposal_id))
+    
+    if request.method == "POST":
+        # Update proposal fields
+        proposal.title = request.form.get("title", "").strip()
+        proposal.departure_location = request.form.get("departure_location", "").strip() or None
+        proposal.destination = request.form.get("destination", "").strip() or None
+        proposal.activities = request.form.get("activities", "").strip() or None
+        
+        budget_str = request.form.get("budget", "").strip()
+        proposal.budget = float(budget_str) if budget_str else None
+        
+        max_participants_str = request.form.get("max_participants", "").strip()
+        proposal.max_participants = int(max_participants_str) if max_participants_str else None
+        
+        # Parse dates
+        start_date_str = request.form.get("start_date", "").strip()
+        proposal.start_date = datetime.strptime(start_date_str, "%Y-%m-%d").date() if start_date_str else None
+        
+        end_date_str = request.form.get("end_date", "").strip()
+        proposal.end_date = datetime.strptime(end_date_str, "%Y-%m-%d").date() if end_date_str else None
+        
+        db.session.commit()
+        flash("Proposal updated successfully.", "success")
+        return redirect(url_for("proposals.proposal_detail", proposal_id=proposal_id))
+    
+    return render_template("proposal_edit.html", proposal=proposal)
+
+
 @proposals_bp.route("/proposal/<int:proposal_id>/message", methods=["POST"])
 @login_required
 def post_message(proposal_id: int):
