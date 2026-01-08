@@ -4,4 +4,7 @@
 # bob@example.org
 
 nordbooyvind@gmail.com
+sondre00bjerve@gmail.com
+mrhenninen@gmail.com
+
 t1@test.com
